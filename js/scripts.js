@@ -1,51 +1,35 @@
-// Function to accept two numbers from user
-const getValues = () => {
-    const num1 = parseFloat(document.getElementById("num1").value);
-    const num2 = parseFloat(document.getElementById("num2").value);
-    return { num1, num2 };
-}
+const display = document.getElementById('display');
+const buttons = document.querySelectorAll('.calc-btn');
 
-// Function to display result
-const showResult = (value) => {
-    document.getElementById("result").innerText = "Result: " + value;
-};
+// Using forEach for button
+buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+        const val = button.getAttribute('data-val');
 
-// Function to add two numbers
-document.getElementById("addBtn").addEventListener("click", () => {
-    const { num1, num2 } = getValues();
-    showResult(num1 + num2);
-});
+        if (val === 'AC') {
+            // Clear the display 
+            display.value = '';
+        } else if (val === 'CLR') {
+            // Remove last character
+            display.value = display.value.slice(0, -1);
+        } else if (val === '=') {
+            // Calculate and display result
+            if (display.value) {
+                const result = new Function('return ' + display.value)();
+                display.value = result;
+            }
+        } else if (val === 'sq') {
+            // Calculate sqaure value of the number
+            let n = parseFloat(display.value) || 0;
+            display.value = n * n;
+        } else if (val === 'cu') {
+            // Calculate cube value of the number
+            let n = parseFloat(display.value) || 0;
+            display.value = n * n * n;
+        } else {
+            // Append numbers or operators
+            display.value += val;
+        }
 
-// Function to subtract two numbers
-document.getElementById("subBtn").addEventListener("click", () => {
-    const { num1, num2 } = getValues();
-    showResult(num1 - num2);
-});
-
-// Function to multiply two numbers
-document.getElementById("mulBtn").addEventListener("click", () => {
-    const { num1, num2 } = getValues();
-    showResult(num1 * num2);
-});
-
-// Function to divide two numbers
-document.getElementById("divBtn").addEventListener("click", () => {
-    const { num1, num2 } = getValues();
-    if (num2 === 0) {
-        showResult("Cannot divide by 0");
-    } else {
-        showResult(num1 / num2);
-    } 
-});
-
-// Function to calculate square of number
-document.getElementById("squareBtn").addEventListener("click", () => {
-    const { num1 } = getValues();
-    showResult(num1 * num1);
-});
-
-// Function to calculate cube of number
-document.getElementById("cubeBtn").addEventListener("click", () => {
-    const { num1 } = getValues();
-    showResult(num1 * num1 * num1);
+    });
 });
